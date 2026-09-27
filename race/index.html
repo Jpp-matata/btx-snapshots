@@ -250,6 +250,8 @@ function celebrate(){
     if(t<420)requestAnimationFrame(loop);else c.style.display="none";})();
 }
 
-async function pull(){try{const r=await fetch("race-public.json?t="+Date.now(),{cache:"no-store"});if(r.ok)render(await r.json());}catch(e){}}
+// live data: GitHub raw (CORS-open, ~5 min cache), refreshed every few minutes by the publisher. Cache-buster per minute.
+const DATA="https://raw.githubusercontent.com/Jpp-matata/btx-snapshots/main/race/race-public.json";
+async function pull(){try{const r=await fetch(DATA+"?t="+Math.floor(Date.now()/60000),{cache:"no-store"});if(r.ok)render(await r.json());}catch(e){try{const r2=await fetch("race-public.json?t="+Date.now(),{cache:"no-store"});if(r2.ok)render(await r2.json());}catch(_){}}}
 pull();setInterval(pull,30000);setInterval(freshness,5000);
 </script>
