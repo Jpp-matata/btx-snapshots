@@ -124,7 +124,7 @@ a{color:var(--main)}
     <div class="hrow">
       <div class="hcol main"><div class="who">Community chain</div><div class="hbig num" id="hMain">—</div></div>
       <div class="hmid"><div class="hdiff num" id="hDiff">—</div><div class="hdl" id="hDiffLbl">blocks</div></div>
-      <div class="hcol branch"><div class="who">The branch</div><div class="hbig num" id="hBranch">—</div></div>
+      <div class="hcol branch"><div class="who" id="hBranchWho">The branch</div><div class="hbig num" id="hBranch">—</div></div>
     </div>
     <p class="hnote" id="hNote">—</p>
   </section>
@@ -142,7 +142,7 @@ a{color:var(--main)}
     <div class="engines">
       <div class="engine main"><div class="who">Community chain</div><div class="big num" id="mainEps">—</div><div class="unit">ep/s · last hour</div></div>
       <div class="vs">vs</div>
-      <div class="engine branch"><div class="who">The branch</div><div class="big num" id="branchEps">—</div><div class="unit">ep/s · last hour</div></div>
+      <div class="engine branch"><div class="who">The branch</div><div class="big num" id="branchEps">—</div><div class="unit" id="branchUnit">ep/s · last hour</div></div>
     </div>
     <div class="lead-strip" id="leadStrip">—</div>
 
@@ -192,7 +192,9 @@ function render(s){
   D=s;
   document.getElementById("root").parentElement; document.body.classList.toggle("won",!!s.won);
   $("mainEps").textContent=fmt(s.main_eps_1h,0);
-  $("branchEps").textContent=fmt(s.branch_eps_1h,0);
+  $("branchEps").textContent=s.branch_stale?"—":fmt(s.branch_eps_1h,0);
+  $("branchUnit").textContent=s.branch_stale?("not seen on the network since "+(s.branch_last_seen_utc||"")):"ep/s · last hour";
+  $("hBranchWho").textContent=s.branch_stale?"The branch (last seen)":"The branch";
   { const mh=s.main_height, bh=s.branch_height;
     $("hMain").textContent=fmt(mh,0); $("hBranch").textContent=fmt(bh,0);
     if(mh&&bh){ const dh=mh-bh; const hd=$("hDiff");
@@ -204,6 +206,7 @@ function render(s){
         : "Heights are level or the branch is taller right now, so a brand-new node on the latest build would not park it by height alone. Nodes that already parked it keep it parked. New nodes: use invalidateblock, easyNode or the community snapshot (steps below)."; }
     else { $("hNote").textContent="—"; } }
   const lead=s.main_eps_1h!=null&&s.branch_eps_1h!=null?(s.main_eps_1h-s.branch_eps_1h):null;
+  if(s.branch_stale&&!s.won){ $("leadStrip").innerHTML="The branch hasn't been seen on the network since <b>"+(s.branch_last_seen_utc||"")+"</b> (its last block: "+fmt(s.branch_height,0)+"). Its known nodes now run 0.34.12 on the community chain. The race compares against the branch's last known total work; if it reappears, live tracking resumes."; } else
   $("leadStrip").innerHTML = s.won ? "The community chain has <b>caught up</b> — hold the lead."
     : lead!=null&&lead>0 ? "The community chain is out-mining the branch by <b>"+fmt(lead,0)+" ep/s</b> right now — the gap is shrinking."
     : "The branch is keeping pace right now — more hashrate needed.";
