@@ -28,7 +28,7 @@ h1{font:700 clamp(28px,7vw,46px)/1.02 var(--sans);margin:0;letter-spacing:-.02em
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,208,163,.5)}70%{box-shadow:0 0 0 8px rgba(37,208,163,0)}100%{box-shadow:0 0 0 0 rgba(37,208,163,0)}}
 .card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:16px;padding:18px}
 .hero{padding:22px 20px 20px;position:relative;overflow:hidden}
-.hero h2{font:600 13px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 14px;text-align:center}
+.hero h2,.heightcard h2{font:600 13px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 14px;text-align:center}
 /* the track */
 .track{position:relative;height:88px;margin:24px 4px 26px;border-radius:12px;
   background:linear-gradient(90deg, rgba(37,208,163,.05), rgba(240,147,43,.06));border:1px solid var(--line)}
@@ -51,6 +51,19 @@ h1{font:700 clamp(28px,7vw,46px)/1.02 var(--sans);margin:0;letter-spacing:-.02em
 .engine .big{font:700 30px/1 var(--mono);font-variant-numeric:tabular-nums;margin:6px 0 2px}
 .engine .unit{font-size:12px;color:var(--muted)}
 .vs{font:700 15px var(--mono);color:var(--faint)}
+.heightcard h2 .ok{color:var(--win);letter-spacing:.06em}
+.heightcard{margin-bottom:14px}
+.hrow{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-top:14px}
+.hcol{text-align:center;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:14px 8px}
+.hcol .who{font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.hcol.main .who{color:var(--main)} .hcol.branch .who{color:var(--branch)}
+.hbig{font:700 clamp(24px,6.5vw,42px)/1.1 var(--mono);font-variant-numeric:tabular-nums;margin-top:6px}
+.hmid{text-align:center;min-width:64px}
+.hdiff{font:700 clamp(22px,6vw,34px)/1 var(--mono);color:var(--win)}
+.hdiff.neg{color:var(--branch)}
+.hdl{font-size:11px;color:var(--muted);margin-top:4px}
+.hnote{margin-top:12px;text-align:center;font-size:14px;color:var(--muted)}
+.hnote b{color:var(--text,#eef4f2)}
 .lead-strip{margin-top:14px;text-align:center;font-size:14px;color:var(--muted)}
 .lead-strip b{color:var(--ink)}
 /* progress */
@@ -96,7 +109,7 @@ a{color:var(--main)}
   <header>
     <div class="kicker">BTX · community mission</div>
     <h1>Secure the Chain</h1>
-    <p class="sub">A separate branch forked off block 228,145, from a point the network had already moved far past. Nodes refuse it under BTX's deep-reorg rule, and the community chain is out-mining it. When our chain's total work passes the branch's, even nodes on plain most-work rules follow the community chain. This is the race.</p>
+    <p class="sub">A separate branch forked off block 228,145, from a point the network had already moved far past. The community chain is <b>taller</b> and out-mining it, and nodes refuse it under BTX's deep-reorg rule. Next milestone: pass its <b>total work</b> too, so even older nodes follow the community chain.</p>
     <span class="live"><span class="dot"></span><span id="freshness">connecting…</span></span>
   </header>
 
@@ -106,8 +119,18 @@ a{color:var(--main)}
     <p class="sub" id="wontext" style="margin-top:8px">The community chain now carries more work than the branch. Keep your node refusing the branch and keep mining — hold the lead.</p>
   </div>
 
+  <section class="card heightcard" id="heightcard">
+    <h2>Step 1 · Block height <span class="ok" id="hOk"></span></h2>
+    <div class="hrow">
+      <div class="hcol main"><div class="who">Community chain</div><div class="hbig num" id="hMain">—</div></div>
+      <div class="hmid"><div class="hdiff num" id="hDiff">—</div><div class="hdl" id="hDiffLbl">blocks</div></div>
+      <div class="hcol branch"><div class="who">The branch</div><div class="hbig num" id="hBranch">—</div></div>
+    </div>
+    <p class="hnote" id="hNote">—</p>
+  </section>
+
   <section class="card hero" id="hero">
-    <h2>The race · cumulative work since the fork</h2>
+    <h2>Step 2 · Total work since the fork · full safety</h2>
     <div class="track" id="track">
       <div class="finish" style="right:10px"><span>◅ CATCH-UP LINE</span></div>
       <div class="gapline" id="gapline"></div>
@@ -117,11 +140,11 @@ a{color:var(--main)}
     </div>
 
     <div class="engines">
-      <div class="engine main"><div class="who">Community chain</div><div class="big num" id="mainEps">—</div><div class="unit">ep/s · last hour</div><div class="unit" id="mainH"></div></div>
+      <div class="engine main"><div class="who">Community chain</div><div class="big num" id="mainEps">—</div><div class="unit">ep/s · last hour</div></div>
       <div class="vs">vs</div>
-      <div class="engine branch"><div class="who">The branch</div><div class="big num" id="branchEps">—</div><div class="unit">ep/s · last hour</div><div class="unit" id="branchH"></div></div>
+      <div class="engine branch"><div class="who">The branch</div><div class="big num" id="branchEps">—</div><div class="unit">ep/s · last hour</div></div>
     </div>
-    <div class="lead-strip" id="leadStrip">—</div><div class="unit" id="heightNote" style="text-align:center;margin-top:6px"></div>
+    <div class="lead-strip" id="leadStrip">—</div>
 
     <div class="prog">
       <div class="bartop"><span id="progLabel">Gap closed</span><span class="num" id="progPct">—</span></div>
@@ -144,7 +167,7 @@ a{color:var(--main)}
     <div class="steps">
       <div class="step"><div class="n"></div><div class="t"><b>Mine the community chain.</b><div class="d">Point your rigs at a main-chain pool (e.g. <code>btx-pool.com:3334</code>) or solo-mine against your own main-chain node. Every GPU shrinks the gap.</div></div></div>
       <div class="step"><div class="n"></div><div class="t"><b>Make your node refuse the branch.</b><div class="d">On your node — it's reversible with <code>reconsiderblock</code>, and survives restarts:<div class="cmd"><button class="copy" data-c="btx-cli invalidateblock 8240c62e62b47fc675610908c03045c244de1dfc06246209830ba9d98468952c">Copy</button>btx-cli <b>invalidateblock</b> 8240c62e62b47fc675610908c03045c244de1dfc06246209830ba9d98468952c</div></div></div></div>
-      <div class="step"><div class="n"></div><div class="t"><b>Check you're on the right chain.</b><div class="d">This must return <code>5ee6458a…</code>:<div class="cmd"><button class="copy" data-c="btx-cli getblockhash 228146">Copy</button>btx-cli <b>getblockhash</b> 228146  →  5ee6458a5533bfbf74a1ff39bf6aa2517c1af59d4ba813898b2742638abebc14</div>Starting fresh? Use the community snapshot at <a href="https://github.com/Jpp-matata/btx-snapshots/releases/latest" target="_blank" rel="noopener">github.com/Jpp-matata/btx-snapshots</a> — it already refuses the branch. Running 0.34.12rc1? Use the maintainer's <a href="https://github.com/btxchain/btx/releases/tag/v0.34.12rc1-e0578040" target="_blank" rel="noopener">v0.34.12rc1-e0578040</a> build: it parks the branch by default.</div></div></div>
+      <div class="step"><div class="n"></div><div class="t"><b>Check you're on the right chain.</b><div class="d">This must return <code>5ee6458a…</code>:<div class="cmd"><button class="copy" data-c="btx-cli getblockhash 228146">Copy</button>btx-cli <b>getblockhash</b> 228146  →  5ee6458a5533bfbf74a1ff39bf6aa2517c1af59d4ba813898b2742638abebc14</div>Starting fresh? Use the community snapshot at <a href="https://github.com/Jpp-matata/btx-snapshots/releases/latest" target="_blank" rel="noopener">github.com/Jpp-matata/btx-snapshots</a> — it already refuses the branch. Running 0.34.12rc1? Use the maintainer's latest prerelease <a href="https://github.com/btxchain/btx/releases/tag/v0.34.12rc1-3ac718cd" target="_blank" rel="noopener">v0.34.12rc1-3ac718cd</a>: it parks the branch by default.</div></div></div>
     </div>
   </section>
 
@@ -170,9 +193,16 @@ function render(s){
   document.getElementById("root").parentElement; document.body.classList.toggle("won",!!s.won);
   $("mainEps").textContent=fmt(s.main_eps_1h,0);
   $("branchEps").textContent=fmt(s.branch_eps_1h,0);
-  $("mainH").textContent=s.main_height?"height "+fmt(s.main_height,0):"";
-  $("branchH").textContent=s.branch_height?"height "+fmt(s.branch_height,0):"";
-  if(s.main_height&&s.branch_height&&!s.won){const dh=s.main_height-s.branch_height; $("heightNote").innerHTML=(dh>0?"The community chain is <b>"+fmt(dh,0)+" blocks taller</b>, but the race is decided by total work, not height: the branch's blocks were heavier.":"")} else if($("heightNote")) $("heightNote").innerHTML="";
+  { const mh=s.main_height, bh=s.branch_height;
+    $("hMain").textContent=fmt(mh,0); $("hBranch").textContent=fmt(bh,0);
+    if(mh&&bh){ const dh=mh-bh; const hd=$("hDiff");
+      hd.textContent=(dh>0?"+":"")+fmt(dh,0); hd.classList.toggle("neg",dh<=0);
+      $("hDiffLbl").textContent=dh>0?"blocks ahead":(dh<0?"blocks behind":"level");
+      $("hOk").textContent=dh>0?"✓ community chain is taller":"";
+      $("hNote").innerHTML=dh>0
+        ? "The community chain is <b>"+fmt(dh,0)+" blocks taller</b>. The maintainer's latest build parks a heavier branch that is shorter than the chain a node follows when switching would rewrite more than 72 blocks, so while we stay taller, updated nodes keep the branch parked."
+        : "The branch is not shorter right now. More hashrate on the community chain grows the height lead."; }
+    else { $("hNote").textContent="—"; } }
   const lead=s.main_eps_1h!=null&&s.branch_eps_1h!=null?(s.main_eps_1h-s.branch_eps_1h):null;
   $("leadStrip").innerHTML = s.won ? "The community chain has <b>caught up</b> — hold the lead."
     : lead!=null&&lead>0 ? "The community chain is out-mining the branch by <b>"+fmt(lead,0)+" ep/s</b> right now — the gap is shrinking."
