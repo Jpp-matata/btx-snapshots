@@ -221,7 +221,9 @@ function render(s){
   $("gapSub").innerHTML=s.won?"community chain is ahead":"blocks of work · "+(s.closing_per_h>0?"closing <b>"+fmt(s.closing_per_h,1)+"</b>/hour":"holding");
   $("eta").textContent=s.won?"— done —":(s.eta_h?"~"+fmt(s.eta_h,0)+" h":"—");
   $("etaSub").textContent=s.won?"the branch can't overtake while we hold the lead":(s.eta_utc?"≈ "+s.eta_utc+" at the current pace":"needs more hashrate to close");
-  if(s.won) $("wontext").textContent="The community chain now carries more work than the branch, measured "+(s.measured_utc||"")+". Keep your node refusing the branch and keep mining — hold the lead.";
+  if(s.won) $("wontext").textContent= s.branch_stale
+    ? "The community chain has passed the branch's last known total work (the branch hasn't been seen on the network since "+(s.branch_last_seen_utc||"")+"). Keep your node refusing the branch and keep mining; if the branch reappears, tracking resumes."
+    : "The community chain now carries more work than the branch, measured "+(s.measured_utc||"")+". Keep your node refusing the branch and keep mining — hold the lead.";
 
   // race track: branch fixed near the front; community position = how far it has closed the gap
   const trackLeft=12, trackRight=85; // % positions (finish/catch-up line ~88%)
