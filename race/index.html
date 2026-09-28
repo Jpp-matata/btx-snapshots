@@ -96,7 +96,7 @@ a{color:var(--main)}
   <header>
     <div class="kicker">BTX · community mission</div>
     <h1>Secure the Chain</h1>
-    <p class="sub">One miner has been building a separate branch off block 228,145. The community chain is out-mining it. When our chain's total work passes the branch's, every node that refuses the branch makes our chain the permanent one. This is the race.</p>
+    <p class="sub">A separate branch forked off block 228,145, from a point the network had already moved far past. Nodes refuse it under BTX's deep-reorg rule, and the community chain is out-mining it. When our chain's total work passes the branch's, even nodes on plain most-work rules follow the community chain. This is the race.</p>
     <span class="live"><span class="dot"></span><span id="freshness">connecting…</span></span>
   </header>
 
@@ -144,13 +144,13 @@ a{color:var(--main)}
     <div class="steps">
       <div class="step"><div class="n"></div><div class="t"><b>Mine the community chain.</b><div class="d">Point your rigs at a main-chain pool (e.g. <code>btx-pool.com:3334</code>) or solo-mine against your own main-chain node. Every GPU shrinks the gap.</div></div></div>
       <div class="step"><div class="n"></div><div class="t"><b>Make your node refuse the branch.</b><div class="d">On your node — it's reversible with <code>reconsiderblock</code>, and survives restarts:<div class="cmd"><button class="copy" data-c="btx-cli invalidateblock 8240c62e62b47fc675610908c03045c244de1dfc06246209830ba9d98468952c">Copy</button>btx-cli <b>invalidateblock</b> 8240c62e62b47fc675610908c03045c244de1dfc06246209830ba9d98468952c</div></div></div></div>
-      <div class="step"><div class="n"></div><div class="t"><b>Check you're on the right chain.</b><div class="d">This must return <code>5ee6458a…</code>:<div class="cmd"><button class="copy" data-c="btx-cli getblockhash 228146">Copy</button>btx-cli <b>getblockhash</b> 228146  →  5ee6458a5533bfbf74a1ff39bf6aa2517c1af59d4ba813898b2742638abebc14</div>Starting fresh? Use the community snapshot at <a href="https://github.com/Jpp-matata/btx-snapshots/releases/latest" target="_blank" rel="noopener">github.com/Jpp-matata/btx-snapshots</a> — it already refuses the branch.</div></div></div>
+      <div class="step"><div class="n"></div><div class="t"><b>Check you're on the right chain.</b><div class="d">This must return <code>5ee6458a…</code>:<div class="cmd"><button class="copy" data-c="btx-cli getblockhash 228146">Copy</button>btx-cli <b>getblockhash</b> 228146  →  5ee6458a5533bfbf74a1ff39bf6aa2517c1af59d4ba813898b2742638abebc14</div>Starting fresh? Use the community snapshot at <a href="https://github.com/Jpp-matata/btx-snapshots/releases/latest" target="_blank" rel="noopener">github.com/Jpp-matata/btx-snapshots</a> — it already refuses the branch. Running 0.34.12rc1? Use the maintainer's <a href="https://github.com/btxchain/btx/releases/tag/v0.34.12rc1-e0578040" target="_blank" rel="noopener">v0.34.12rc1-e0578040</a> build: it parks the branch by default.</div></div></div>
     </div>
   </section>
 
   <section class="card why">
     <h3>Why it matters</h3>
-    <p>For three days one miner extended a separate branch that nobody could download. It's valid, and it currently carries more total work than the chain everyone else built. <b>By default, a node that finds it switches to it automatically</b> — which would undo ~2,800 blocks of everyone's mining. This isn't decided by one person; it's decided by all of us. Two things win it: <b>hashrate</b> on the community chain, and <b>nodes refusing the branch</b>. When our chain's work passes the branch's, the danger is over and it can't come back so long as we hold the lead.</p>
+    <p>The branch forked after block 228,145 and first appeared on 25 Sep, already 250 blocks behind the chain everyone was building. It's valid, and it has carried more total work than the community chain, so a brand-new node started from before the fork would simply follow it, <b>undoing 4,300+ blocks of everyone's mining</b>. BTX's rule is that nodes don't automatically reorganize deeper than 6 blocks, and the maintainer's new build enforces it and parks the branch by default. This isn't one person's call: pools, node operators, easyNode, the snapshots and the maintainer all refuse it. Two things finish it: <b>nodes refusing the branch</b>, and <b>hashrate</b> on the community chain until our total work passes the branch's.</p>
   </section>
 
   <footer>
