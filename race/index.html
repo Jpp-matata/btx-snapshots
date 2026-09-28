@@ -200,8 +200,8 @@ function render(s){
       $("hDiffLbl").textContent=dh>0?"blocks ahead":(dh<0?"blocks behind":"level");
       $("hOk").textContent=dh>0?"✓ community chain is taller":"";
       $("hNote").innerHTML=dh>0
-        ? "The community chain is <b>"+fmt(dh,0)+" blocks taller</b>. The maintainer's latest build parks a heavier branch that is shorter than the chain a node follows when switching would rewrite more than 72 blocks, so while we stay taller, updated nodes keep the branch parked."
-        : "The branch is not shorter right now. More hashrate on the community chain grows the height lead."; }
+        ? "The community chain is <b>"+fmt(dh,0)+" blocks taller</b>. The maintainer's latest build parks a heavier branch that is shorter than the chain a node follows (switching would rewrite more than 72 blocks), and once parked it stays parked. A bigger height lead keeps brand-new installs safe too."
+        : "Heights are level or the branch is taller right now, so a brand-new node on the latest build would not park it by height alone. Nodes that already parked it keep it parked. New nodes: use invalidateblock, easyNode or the community snapshot (steps below)."; }
     else { $("hNote").textContent="—"; } }
   const lead=s.main_eps_1h!=null&&s.branch_eps_1h!=null?(s.main_eps_1h-s.branch_eps_1h):null;
   $("leadStrip").innerHTML = s.won ? "The community chain has <b>caught up</b> — hold the lead."
