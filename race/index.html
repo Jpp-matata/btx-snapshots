@@ -117,11 +117,11 @@ a{color:var(--main)}
     </div>
 
     <div class="engines">
-      <div class="engine main"><div class="who">Community chain</div><div class="big num" id="mainEps">—</div><div class="unit">ep/s · last hour</div></div>
+      <div class="engine main"><div class="who">Community chain</div><div class="big num" id="mainEps">—</div><div class="unit">ep/s · last hour</div><div class="unit" id="mainH"></div></div>
       <div class="vs">vs</div>
-      <div class="engine branch"><div class="who">The branch</div><div class="big num" id="branchEps">—</div><div class="unit">ep/s · last hour</div></div>
+      <div class="engine branch"><div class="who">The branch</div><div class="big num" id="branchEps">—</div><div class="unit">ep/s · last hour</div><div class="unit" id="branchH"></div></div>
     </div>
-    <div class="lead-strip" id="leadStrip">—</div>
+    <div class="lead-strip" id="leadStrip">—</div><div class="unit" id="heightNote" style="text-align:center;margin-top:6px"></div>
 
     <div class="prog">
       <div class="bartop"><span id="progLabel">Gap closed</span><span class="num" id="progPct">—</span></div>
@@ -170,6 +170,9 @@ function render(s){
   document.getElementById("root").parentElement; document.body.classList.toggle("won",!!s.won);
   $("mainEps").textContent=fmt(s.main_eps_1h,0);
   $("branchEps").textContent=fmt(s.branch_eps_1h,0);
+  $("mainH").textContent=s.main_height?"height "+fmt(s.main_height,0):"";
+  $("branchH").textContent=s.branch_height?"height "+fmt(s.branch_height,0):"";
+  if(s.main_height&&s.branch_height&&!s.won){const dh=s.main_height-s.branch_height; $("heightNote").innerHTML=(dh>0?"The community chain is <b>"+fmt(dh,0)+" blocks taller</b>, but the race is decided by total work, not height: the branch's blocks were heavier.":"")} else if($("heightNote")) $("heightNote").innerHTML="";
   const lead=s.main_eps_1h!=null&&s.branch_eps_1h!=null?(s.main_eps_1h-s.branch_eps_1h):null;
   $("leadStrip").innerHTML = s.won ? "The community chain has <b>caught up</b> — hold the lead."
     : lead!=null&&lead>0 ? "The community chain is out-mining the branch by <b>"+fmt(lead,0)+" ep/s</b> right now — the gap is shrinking."
